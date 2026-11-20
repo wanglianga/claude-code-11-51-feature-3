@@ -18,7 +18,8 @@ import java.util.List;
         @JsonSubTypes.Type(value = Expr.Convert.class, name = "convert"),
         @JsonSubTypes.Type(value = Expr.Ref.class, name = "ref"),
         @JsonSubTypes.Type(value = Expr.Cohort.class, name = "cohort"),
-        @JsonSubTypes.Type(value = Expr.If.class, name = "if")
+        @JsonSubTypes.Type(value = Expr.If.class, name = "if"),
+        @JsonSubTypes.Type(value = Expr.PromoBridge.class, name = "promo_bridge")
 })
 public sealed interface Expr {
 
@@ -52,4 +53,11 @@ public sealed interface Expr {
 
     /** 条件表达式 */
     record If(Expr cond, Expr then, Expr otherwise) implements Expr {}
+
+    /**
+     * 促销毛利桥数据产品节点：以受控方式引用促销让利/退货/成本/厂商补偿事实，
+     * 输出按 活动×商品×门店×期间 的桥（标价、顾客折让、退货冲回、净销售、成本、毛利、
+     * 厂商补偿与净毛利贡献）。字段固定，不接受任意 SQL；运行由促销桥引擎执行。
+     */
+    record PromoBridge(String method, String taxBasis) implements Expr {}
 }

@@ -37,6 +37,7 @@ public class Evaluator {
         if (e instanceof Expr.Convert c) return evalConvert(c);
         if (e instanceof Expr.Cohort c) return evalCohort(c);
         if (e instanceof Expr.If i) return evalIf(i);
+        if (e instanceof Expr.PromoBridge b) return evalPromoBridge(b);
         if (e instanceof Expr.Const c) return evalConst(c);
         if (e instanceof Expr.Field f) {
             throw new IllegalStateException("字段必须置于聚合 agg 内使用: " + f.source() + "." + f.field());
@@ -435,6 +436,14 @@ public class Evaluator {
     private String comparePeriod(String period, String compare) {
         YearMonth ym = YearMonth.parse(period);
         return "prev_year".equals(compare) ? ym.minusYears(1).toString() : ym.minusMonths(1).toString();
+    }
+
+    // ---------------- 促销毛利桥 ----------------
+    private Series evalPromoBridge(Expr.PromoBridge b) {
+        if (ctx.promoBridgeResolver == null) {
+            throw new IllegalStateException("促销毛利桥求值器未就绪（需由运行服务注入）");
+        }
+        return ctx.promoBridgeResolver.apply(b);
     }
 
     // ---------------- 工具 ----------------

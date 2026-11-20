@@ -30,6 +30,10 @@
           <el-icon><FolderOpened /></el-icon>
           <span>数据源</span>
         </el-menu-item>
+        <el-menu-item index="/promo-bridge">
+          <el-icon><TrendCharts /></el-icon>
+          <span>促销毛利桥</span>
+        </el-menu-item>
         <el-menu-item index="/impact">
           <el-icon><Share /></el-icon>
           <span>影响分析</span>
@@ -66,7 +70,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { DataAnalysis, HomeFilled, Document, VideoPlay, Grid, Stamp, FolderOpened, Share, UserFilled } from '@element-plus/icons-vue'
+import { DataAnalysis, HomeFilled, Document, VideoPlay, Grid, Stamp, FolderOpened, Share, UserFilled, TrendCharts } from '@element-plus/icons-vue'
 
 const route = useRoute()
 const router = useRouter()
@@ -82,7 +86,8 @@ const breadcrumbs = computed(() => {
     '/reports': '报表中心',
     '/approvals': '审批中心',
     '/sources': '数据源',
-    '/impact': '影响分析'
+    '/impact': '影响分析',
+    '/promo-bridge': '促销毛利桥'
   }
   const items = []
   if (route.path !== '/') {

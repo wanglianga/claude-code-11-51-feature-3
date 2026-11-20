@@ -41,6 +41,12 @@ public class OrderFact {
     @Column(name = "created_batch")
     private Long createdBatch;
 
+    @Column(name = "tax_basis", nullable = false)
+    private String taxBasis = "tax_inclusive";
+
+    @Column(name = "tax_rate", nullable = false)
+    private BigDecimal taxRate = new BigDecimal("0.1300");
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getOrderId() { return orderId; }
@@ -63,4 +69,8 @@ public class OrderFact {
     public void setChannel(String channel) { this.channel = channel; }
     public Long getCreatedBatch() { return createdBatch; }
     public void setCreatedBatch(Long createdBatch) { this.createdBatch = createdBatch; }
+    public String getTaxBasis() { return taxBasis; }
+    public void setTaxBasis(String taxBasis) { this.taxBasis = taxBasis; }
+    public BigDecimal getTaxRate() { return taxRate; }
+    public void setTaxRate(BigDecimal taxRate) { this.taxRate = taxRate; }
 }

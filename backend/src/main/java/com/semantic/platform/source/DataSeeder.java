@@ -4,6 +4,7 @@ import com.semantic.platform.metric.MetricService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.List;
  * 覆盖回放场景：跨营业日订单、多次部分退款、临时闭店、跨期新店、缺批次数据、迟到退款。
  */
 @Component
+@Order(10)
 public class DataSeeder implements CommandLineRunner {
 
     private static final Logger log = LoggerFactory.getLogger(DataSeeder.class);
@@ -46,7 +48,7 @@ public class DataSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (orderRepo.count() > 0) {
+        if (orderRepo.findAll().stream().anyMatch(o -> "O001".equals(o.getOrderId()))) {
             log.info("样例数据已存在，跳过播种");
             return;
         }

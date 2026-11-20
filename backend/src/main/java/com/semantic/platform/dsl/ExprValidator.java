@@ -68,6 +68,8 @@ public class ExprValidator {
             collectRefs(c.expr(), refs);
         } else if (e instanceof Expr.Cohort c) {
             collectRefs(c.base(), refs);
+        } else if (e instanceof Expr.PromoBridge) {
+            // 无指标引用；事实来源由促销桥引擎固定
         } else if (e instanceof Expr.If i) {
             collectRefs(i.cond(), refs);
             collectRefs(i.then(), refs);
@@ -140,6 +142,8 @@ public class ExprValidator {
             return inferCohort(c, path, result);
         } else if (e instanceof Expr.If i) {
             return inferIf(i, path, result);
+        } else if (e instanceof Expr.PromoBridge b) {
+            return inferPromoBridge(b, path, result);
         }
         result.error(path, "未知表达式节点");
         return MetricType.bool();
@@ -322,6 +326,17 @@ public class ExprValidator {
         }
         // 同店增长结果是比率
         return MetricType.ratio(base.timeGrain(), base.dims());
+    }
+
+    private MetricType inferPromoBridge(Expr.PromoBridge b, String path, Result r) {
+        if (b.method() != null && !b.method().equals("amount") && !b.method().equals("quantity")) {
+            r.error(path, "promo_bridge.method 仅支持 amount | quantity");
+        }
+        if (b.taxBasis() != null && !b.taxBasis().equals("tax_inclusive") && !b.taxBasis().equals("tax_exclusive")) {
+            r.error(path, "promo_bridge.taxBasis 仅支持 tax_inclusive | tax_exclusive");
+        }
+        return MetricType.amount("CNY", currentGrain,
+                Set.of("campaign_code", "sku", "store_id", "line_kind"));
     }
 
     private MetricType inferIf(Expr.If i, String path, Result r) {

@@ -38,6 +38,9 @@ public class EvaluationContext {
     /** 引用指标的类型表 */
     public Map<String, com.semantic.platform.dsl.MetricType> refTypes = new HashMap<>();
 
+    /** 促销毛利桥数据产品求值器（由运行服务注入）。 */
+    public java.util.function.Function<com.semantic.platform.dsl.Expr.PromoBridge, Series> promoBridgeResolver;
+
     public EvaluationContext(LocalDate from, LocalDate to, String grain) {
         this.from = from;
         this.to = to;

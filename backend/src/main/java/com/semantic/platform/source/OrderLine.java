@@ -37,6 +37,15 @@ public class OrderLine {
     @Column(name = "created_batch")
     private Long createdBatch;
 
+    @Column(name = "line_type", nullable = false)
+    private String lineType = "sale";
+
+    @Column(name = "tax_basis", nullable = false)
+    private String taxBasis = "tax_inclusive";
+
+    @Column(name = "tax_rate", nullable = false)
+    private BigDecimal taxRate = new BigDecimal("0.1300");
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
     public String getLineId() { return lineId; }
@@ -57,4 +66,10 @@ public class OrderLine {
     public void setAmount(BigDecimal amount) { this.amount = amount; }
     public Long getCreatedBatch() { return createdBatch; }
     public void setCreatedBatch(Long createdBatch) { this.createdBatch = createdBatch; }
+    public String getLineType() { return lineType; }
+    public void setLineType(String lineType) { this.lineType = lineType; }
+    public String getTaxBasis() { return taxBasis; }
+    public void setTaxBasis(String taxBasis) { this.taxBasis = taxBasis; }
+    public BigDecimal getTaxRate() { return taxRate; }
+    public void setTaxRate(BigDecimal taxRate) { this.taxRate = taxRate; }
 }

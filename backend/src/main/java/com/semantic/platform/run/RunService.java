@@ -8,6 +8,7 @@ import com.semantic.platform.engine.EvaluationContext;
 import com.semantic.platform.engine.Evaluator;
 import com.semantic.platform.engine.Series;
 import com.semantic.platform.metric.MetricService;
+import com.semantic.platform.promo.PromoService;
 import com.semantic.platform.metric.MetricVersion;
 import com.semantic.platform.metric.MetricVersionRepository;
 import com.semantic.platform.source.OrderFactRepository;
@@ -43,13 +44,14 @@ public class RunService {
     private final StoreStatusRepository storeStatusRepo;
     private final HolidayRepository holidayRepo;
     private final SourceBatchRepository batchRepo;
+    private final PromoService promoService;
     private final ObjectMapper mapper = new ObjectMapper();
 
     public RunService(MetricService metricService, MetricVersionRepository versionRepo,
                       RunRepository runRepo, RunCellRepository cellRepo, RunCellLineageRepository lineageRepo,
                       OrderFactRepository orderRepo, OrderLineRepository orderLineRepo, RefundFactRepository refundRepo,
                       StoreStatusRepository storeStatusRepo, HolidayRepository holidayRepo,
-                      SourceBatchRepository batchRepo) {
+                      SourceBatchRepository batchRepo, PromoService promoService) {
         this.metricService = metricService;
         this.versionRepo = versionRepo;
         this.runRepo = runRepo;
@@ -61,6 +63,7 @@ public class RunService {
         this.storeStatusRepo = storeStatusRepo;
         this.holidayRepo = holidayRepo;
         this.batchRepo = batchRepo;
+        this.promoService = promoService;
     }
 
     /** 执行一次运行。 */
@@ -91,6 +94,9 @@ public class RunService {
             return metricService.parseExpr(pv.getDefinitionJson());
         };
         ctx.refTypes = metricService.publishedTypes();
+        ctx.promoBridgeResolver = b -> promoService.evaluateSeries(from, to, grain,
+                b.method() == null ? "amount" : b.method(),
+                b.taxBasis() == null ? "tax_inclusive" : b.taxBasis());
 
         // 覆盖范围：从批次表构建
         buildCoverage(ctx, from, to);

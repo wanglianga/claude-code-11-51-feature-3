@@ -12,6 +12,7 @@ import ReportsView from './views/ReportsView.vue'
 import ApprovalsView from './views/ApprovalsView.vue'
 import SourcesView from './views/SourcesView.vue'
 import ImpactView from './views/ImpactView.vue'
+import PromoBridgeView from './views/PromoBridgeView.vue'
 
 const routes = [
   { path: '/login', name: 'login', component: LoginView },
@@ -22,7 +23,8 @@ const routes = [
   { path: '/reports', name: 'reports', component: ReportsView },
   { path: '/approvals', name: 'approvals', component: ApprovalsView },
   { path: '/sources', name: 'sources', component: SourcesView },
-  { path: '/impact', name: 'impact', component: ImpactView }
+  { path: '/impact', name: 'impact', component: ImpactView },
+  { path: '/promo-bridge', name: 'promo-bridge', component: PromoBridgeView }
 ]
 
 const router = createRouter({
